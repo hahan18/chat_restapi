@@ -58,8 +58,8 @@ urlpatterns = [
     # API ENDPOINTS
     path('api/v1/thread/', ThreadCreateDestroyAPIView.as_view(), name='thread'),
     path('api/v1/list/<int:pk>/', ThreadListAPIView.as_view(), name='list'),
-    path('ap1/v1/message/', MessageListCreateAPIView.as_view(), name='message_post'),
-    path('ap1/v1/message/<int:pk>/', MessageListCreateAPIView.as_view(), name='message_get'),
+    path('api/v1/message/', MessageListCreateAPIView.as_view(), name='message_post'),
+    path('api/v1/message/<int:pk>/', MessageListCreateAPIView.as_view(), name='message_get'),
     path('api/v1/is_read/', IsReadUpdateAPIView.as_view(), name='is_read'),
     path('api/v1/not_read/<int:pk>', IsNotReadAPIView.as_view(), name='is_not_read'),
 ]
