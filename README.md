@@ -10,6 +10,10 @@ API provides CRUD actions for chat, JWT based authentication.
 Swagger endpoint:
 ```api/v1/swagger/```
 
+* Swagger raise exception "view's MessageListCreateAPIView raised
+exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to 
+detect and short-circuit this" because views.py are using mixins.py file. 
+
 Redoc endpoint:
 ```api/v1/redoc/```
 
