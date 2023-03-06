@@ -3,20 +3,17 @@
 Chat REST API is an API which provides functionality to make your own app.
 
 # About and Technologies
-Chat REST API based on Django, using Django REST Framework. 
-API provides CRUD actions for chat, JWT based authentication. 
+
+Chat REST API based on Django, using Django REST Framework.
+API provides CRUD actions for chat, JWT based authentication.
 
 # API Endpoints
+
 Swagger endpoint:
 ```api/v1/swagger/```
 
-* Swagger raise exception "view's MessageListCreateAPIView raised
-exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to 
-detect and short-circuit this" because views.py are using mixins.py file. 
-
 Redoc endpoint:
 ```api/v1/redoc/```
-
 
 ## Installation
 
@@ -44,11 +41,11 @@ Run the server using:
 ```python manage.py runserver```
 
 # Improves
+
 Swagger/Redoc docs endpoints.
 
-
-
 ## Docker
+
 Coming soon...
 
    

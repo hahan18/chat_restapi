@@ -71,20 +71,22 @@ class ThreadListAPIView(GenericAPIView):
             thread_id=OuterRef('pk')
         ).order_by('-created').values('text', 'sender_id')[:1]
 
-        threads = Thread.objects.filter(
-            Q(participant1=self.kwargs['pk']) | Q(participant2=self.kwargs['pk'])
-        ).annotate(
-            last_message_text=Subquery(last_message.values('text')),
-            last_message_sender=Subquery(last_message.values('sender_id'))
-        ).values(
-            'participant1',
-            'participant2',
-            'created',
-            'updated',
-            'last_message_text',
-            'last_message_sender'
-        ).order_by()
-
+        try:
+            threads = Thread.objects.filter(
+                Q(participant1=self.kwargs['pk']) | Q(participant2=self.kwargs['pk'])
+            ).annotate(
+                last_message_text=Subquery(last_message.values('text')),
+                last_message_sender=Subquery(last_message.values('sender_id'))
+            ).values(
+                'participant1',
+                'participant2',
+                'created',
+                'updated',
+                'last_message_text',
+                'last_message_sender'
+            ).order_by()
+        except KeyError:
+            return
         return threads
 
     def get(self, request, *args, **kwargs):
@@ -103,7 +105,11 @@ class MessageListCreateAPIView(GenericAPIView,
     serializer_class = MessageListCreateSerializer
 
     def get_queryset(self):
-        messages = Message.objects.filter(thread_id=self.kwargs['pk'])
+        try:
+            thread = Thread.objects.get(id=self.kwargs['pk'])
+            messages = Message.objects.filter(thread=thread)
+        except KeyError:
+            return
         return messages
 
     def get(self, request, *args, **kwargs):
@@ -160,12 +166,14 @@ class IsNotReadAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        count = Message.objects.filter(
-            Q(thread__participant1=self.kwargs['pk']) & ~Q(sender_id=F('thread__participant1')) |
-            Q(thread__participant2=self.kwargs['pk']) & ~Q(sender_id=F('thread__participant2')),
-            is_read=False
-        ).count()
-
+        try:
+            count = Message.objects.filter(
+                Q(thread__participant1=self.kwargs['pk']) & ~Q(sender_id=F('thread__participant1')) |
+                Q(thread__participant2=self.kwargs['pk']) & ~Q(sender_id=F('thread__participant2')),
+                is_read=False
+            ).count()
+        except KeyError:
+            return
         return count
 
     def get(self, request, *args, **kwargs):
